@@ -9,6 +9,7 @@ jobs:
         name: phpunit (PHP ${{ matrix.php }}, PHPUnit ${{ matrix.phpunit }}, Symfony ${{ matrix.symfony }})
         runs-on: ubuntu-22.04
         strategy:
+            fail-fast: false
             matrix:
                 include:
                     -   php: '7.2'
@@ -71,7 +72,12 @@ jobs:
             -   name: Install dependencies with composer
                 env:
                     SYMFONY_REQUIRE: ${{ matrix.symfony }}
-                run: composer update --no-interaction --no-progress
+                run: |
+                    if [[ "$SYMFONY_REQUIRE" == 4.4.* || "$SYMFONY_REQUIRE" == 5.4.* ]]; then
+                        composer update --no-interaction --no-progress --no-audit
+                    else
+                        composer update --no-interaction --no-progress
+                    fi
 
             -   name: Run test suite
                 uses: php-actions/phpunit@v3
