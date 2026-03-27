@@ -6,6 +6,7 @@ on:
 
 jobs:
     phpunit:
+        name: phpunit (PHP ${{ matrix.php }}, PHPUnit ${{ matrix.phpunit }}, Symfony ${{ matrix.symfony }})
         runs-on: ubuntu-20.04
         strategy:
             matrix:
